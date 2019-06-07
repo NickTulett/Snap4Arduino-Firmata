@@ -32,9 +32,11 @@
 #include <Servo.h>
 #include <Wire.h>
 #include <Firmata.h>
-#include <LiquidCrystal.h>
+//#include <LiquidCrystal.h>
+#include <LiquidCrystal_I2C.h>
 
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+//LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+LiquidCrystal_I2C lcd(0x27, 20, 4);
 
 // move the following defines to Firmata.h?
 #define I2C_WRITE B00000000
@@ -594,8 +596,10 @@ void systemResetCallback()
 
 void setup() 
 {
-  lcd.begin(16, 2);
-
+  lcd.begin();
+  lcd.backlight();
+  lcd.setCursor(3,0);
+  lcd.print("Hello, snap!");  
   Firmata.setFirmwareVersion(FIRMATA_MAJOR_VERSION, FIRMATA_MINOR_VERSION);
 
   Firmata.attach(ANALOG_MESSAGE, analogWriteCallback);
@@ -608,6 +612,8 @@ void setup()
 
   Firmata.begin(57600);
   systemResetCallback();  // reset to default config
+  lcd.begin();
+  lcd.print("Ready, snap!");  
 }
 
 /*==============================================================================
